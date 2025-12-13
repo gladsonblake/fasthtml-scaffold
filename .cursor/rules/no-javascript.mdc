@@ -1,0 +1,300 @@
+---
+description: Avoid JavaScript - use HTMX attributes built into FastHTML for all interactivity
+alwaysApply: true
+---
+
+# No JavaScript Rule
+
+## Absolute Prohibition
+
+NEVER write custom JavaScript. FastHTML has HTMX built-in, providing all the interactivity you need through HTML attributes. This includes:
+
+### Forbidden Patterns
+
+1. **No `<script>` tags with custom code**
+   ```html
+   <!-- FORBIDDEN -->
+   <script>
+     document.getElementById('btn').addEventListener('click', () => {
+       fetch('/api/data')...
+     });
+   </script>
+   ```
+
+2. **No `.js` files**
+   - Never create `.js` or `.ts` files for custom logic
+   - Never write inline JavaScript event handlers
+
+3. **No JavaScript event handlers**
+   ```python
+   # FORBIDDEN
+   Button("Click", onclick="handleClick()")
+   Div("Content", onmouseover="showTooltip()")
+   ```
+
+4. **No fetch/XMLHttpRequest calls**
+   ```javascript
+   // FORBIDDEN - use htmx instead
+   fetch('/api/endpoint').then(r => r.json())
+   ```
+
+## What to Use Instead
+
+### HTMX Attributes for AJAX Requests
+
+FastHTML converts Python underscores to HTML hyphens (`hx_get` → `hx-get`):
+
+```python
+# CORRECT - GET request
+Button("Load Data", hx_get="/api/data", hx_target="#result")
+
+# CORRECT - POST request  
+Button("Submit", hx_post="/api/submit", hx_target="#result", hx_swap="innerHTML")
+
+# CORRECT - Other HTTP methods
+Button("Update", hx_put="/api/update/1")
+Button("Delete", hx_delete="/api/delete/1", hx_confirm="Are you sure?")
+```
+
+### Core HTMX Attributes Reference
+
+| Attribute | Purpose | Example |
+|-----------|---------|---------|
+| `hx_get` | Issue GET request | `hx_get="/api/items"` |
+| `hx_post` | Issue POST request | `hx_post="/api/create"` |
+| `hx_put` | Issue PUT request | `hx_put="/api/update/1"` |
+| `hx_delete` | Issue DELETE request | `hx_delete="/api/delete/1"` |
+| `hx_target` | Where to swap content | `hx_target="#result"` |
+| `hx_swap` | How to swap content | `hx_swap="innerHTML"` |
+| `hx_trigger` | Event that triggers request | `hx_trigger="click"` |
+| `hx_vals` | Extra values to send | `hx_vals='{"key": "value"}'` |
+| `hx_confirm` | Confirmation dialog | `hx_confirm="Delete this?"` |
+| `hx_indicator` | Loading indicator | `hx_indicator="#spinner"` |
+
+### Swap Strategies
+
+```python
+# Replace inner HTML (default)
+Div(hx_get="/content", hx_swap="innerHTML")
+
+# Replace entire element
+Div(hx_get="/content", hx_swap="outerHTML")
+
+# Append to end
+Div(hx_get="/items", hx_swap="beforeend")
+
+# Prepend to start
+Div(hx_get="/items", hx_swap="afterbegin")
+
+# Insert after element
+Div(hx_get="/content", hx_swap="afterend")
+
+# Insert before element
+Div(hx_get="/content", hx_swap="beforebegin")
+
+# Delete the target element
+Button(hx_delete="/item/1", hx_swap="delete")
+```
+
+### Event Triggers
+
+Instead of JavaScript event listeners, use `hx_trigger`:
+
+```python
+# Trigger on click (default for buttons)
+Button("Click Me", hx_get="/api/data", hx_trigger="click")
+
+# Trigger on input change with debounce
+Input(hx_get="/api/search", hx_trigger="keyup changed delay:500ms", hx_target="#results")
+
+# Trigger on form blur
+Input(hx_get="/api/validate", hx_trigger="blur")
+
+# Trigger on page load
+Div(hx_get="/api/init", hx_trigger="load")
+
+# Trigger when scrolled into view (lazy loading)
+Div(hx_get="/api/more", hx_trigger="revealed")
+
+# Polling - trigger every N seconds
+Div(hx_get="/api/status", hx_trigger="every 2s")
+
+# Conditional triggers
+Button(hx_get="/admin", hx_trigger="click[ctrlKey]")  # Only on Ctrl+Click
+
+# Throttled requests
+Button(hx_get="/api/data", hx_trigger="click throttle:1s")
+
+# Combined triggers
+Input(hx_get="/validate", hx_trigger="blur, keyup[target.value.length > 3] delay:300ms")
+```
+
+### Dynamic URL Generation
+
+Use the `.to()` method on handlers for type-safe URLs:
+
+```python
+@app.post
+def update_item(id: int): 
+    return f"Updated {id}"
+
+# CORRECT - use handler reference
+Button("Update", hx_post=update_item.to(id=42))
+
+# Also works with query params
+Button("Search", hx_get=search.to(query="test", page=1))
+```
+
+### Loading Indicators
+
+```python
+# Show spinner during request
+Button("Load", hx_get="/slow", hx_indicator="#spinner")
+Span("Loading...", id="spinner", cls="htmx-indicator")
+
+# The htmx-indicator class hides by default, shows during request
+```
+
+### Confirmation Dialogs
+
+```python
+# Simple confirmation
+Button("Delete", hx_delete="/item/1", hx_confirm="Are you sure?")
+
+# With prompt for input
+Button("Delete Account", hx_delete="/account", hx_prompt="Type DELETE to confirm")
+```
+
+### Out-of-Band Swaps
+
+Update multiple elements from a single response:
+
+```python
+# In your route handler, return multiple elements
+@app.post("/update")
+def update():
+    return (
+        Div("Main content", id="main"),
+        Div("Updated sidebar", id="sidebar", hx_swap_oob="true"),
+        Div("Updated header", id="header", hx_swap_oob="innerHTML")
+    )
+```
+
+### Form Handling
+
+```python
+# Forms automatically include all inputs
+Form(
+    Input(id="name", name="name"),
+    Input(id="email", name="email", type="email"),
+    Button("Submit"),
+    hx_post="/api/register",
+    hx_target="#result"
+)
+
+# Server receives form data as function parameters
+@app.post("/api/register")
+def register(name: str, email: str):
+    return Div(f"Registered: {name}")
+```
+
+### Real-Time Updates with Server-Sent Events
+
+```python
+# Include SSE extension in app headers
+hdrs = (Script(src="https://unpkg.com/htmx-ext-sse@2.2.3/sse.js"),)
+app, rt = fast_app(hdrs=hdrs)
+
+# Client connects to SSE stream
+@rt
+def index():
+    return Div(
+        hx_ext="sse",
+        sse_connect="/stream",
+        sse_swap="message",
+        hx_swap="beforeend"
+    )
+
+# Server pushes updates
+@rt("/stream")
+async def stream():
+    async def generate():
+        while True:
+            yield sse_message(Div("New update"))
+            await asyncio.sleep(1)
+    return EventStream(generate())
+```
+
+### WebSocket Support
+
+```python
+app = FastHTML(exts='ws')
+
+@rt('/')
+def home():
+    return Div(
+        Form(Input(id='msg'), ws_send=True),
+        Ul(id='messages'),
+        hx_ext='ws',
+        ws_connect='/ws'
+    )
+
+@app.ws('/ws')
+async def ws(msg: str, send):
+    await send(Li(msg, hx_swap_oob="beforeend:#messages"))
+```
+
+### Accessing HTMX Headers
+
+```python
+# Access HTMX request info in handlers
+@app.get("/api/data")
+def get_data(htmx):
+    if htmx.request:  # This is an HTMX request
+        return Div("Partial content")
+    return Titled("Full Page", Div("Full content"))
+```
+
+## Exception: External Libraries Only
+
+The ONLY acceptable use of `<script>` tags is for loading external libraries that enhance HTMX:
+
+```python
+# ACCEPTABLE - external libraries for HTMX extensions
+hdrs = (
+    Script(src="https://unpkg.com/htmx-ext-sse@2.2.3/sse.js"),  # SSE support
+)
+
+# ACCEPTABLE - libraries in Theme headers
+Theme.blue.headers(
+    katex=True,        # Math rendering
+    highlightjs=True,  # Code highlighting  
+    apex_charts=True   # Charts
+)
+```
+
+## Common JavaScript Patterns → HTMX Solutions
+
+| JavaScript Pattern | HTMX Solution |
+|--------------------|---------------|
+| `fetch()` API calls | `hx_get`, `hx_post`, etc. |
+| `addEventListener('click')` | `hx_trigger="click"` |
+| `document.getElementById().innerHTML = ` | `hx_target="#id"` + `hx_swap="innerHTML"` |
+| `confirm()` dialogs | `hx_confirm="message"` |
+| `setInterval()` polling | `hx_trigger="every 2s"` |
+| Form `onsubmit` | `hx_post` on Form |
+| Input validation | `hx_trigger="blur"` + validation endpoint |
+| Infinite scroll | `hx_trigger="revealed"` on sentinel element |
+| Debounced search | `hx_trigger="keyup changed delay:500ms"` |
+| Loading spinners | `hx_indicator="#spinner"` |
+| SPA navigation | `hx_push_url="true"` |
+
+## Why This Rule Exists
+
+1. **Simplicity** - HTML attributes are easier to read and maintain than JavaScript
+2. **Server Authority** - Logic stays on the server where it belongs
+3. **Type Safety** - Python handlers provide type checking; JavaScript doesn't
+4. **Hypermedia** - HTMX follows REST/hypermedia principles correctly
+5. **No Build Step** - No bundlers, transpilers, or node_modules needed
+6. **Progressive Enhancement** - Works without JavaScript for basic functionality
+7. **FastHTML Integration** - HTMX is built into FastHTML; use it!

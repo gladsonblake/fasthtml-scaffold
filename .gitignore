@@ -1,0 +1,30 @@
+# Byte-code files
+__pycache__
+*.pyc
+*.pyo
+
+# IDE-related directories and files (optional, adjust for your IDE)
+.idea/
+.vscode/
+*.swp
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.coverage
+
+# Virtual environment
+.venv/  # The default location for uv virtual environments
+venv/
+
+# Environment variables
+.env
+.flaskenv
+
+# Session key
+.sesskey
+
+# OS-generated files
+.DS_Store
+Thumbs.db

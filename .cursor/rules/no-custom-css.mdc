@@ -1,0 +1,118 @@
+---
+description: Never write custom CSS - use Tailwind utilities and component libraries instead
+alwaysApply: true
+---
+
+# No Custom CSS Rule
+
+## Absolute Prohibition
+
+NEVER write custom CSS in any form. This includes:
+
+### Forbidden Patterns
+
+1. **No `<style>` tags**
+   ```html
+   <!-- FORBIDDEN -->
+   <style>
+     .my-class { color: red; }
+   </style>
+   ```
+
+2. **No `.css` files**
+   - Never create `.css`, `.scss`, `.sass`, or `.less` files
+   - Never import external stylesheets (except CDN libraries)
+
+3. **No inline `style=` attributes**
+   ```python
+   # FORBIDDEN
+   Div("Content", style="color: red; padding: 10px;")
+   ```
+
+4. **No CSS-in-JS or style dictionaries**
+   ```python
+   # FORBIDDEN
+   styles = {"color": "red", "padding": "10px"}
+   Div("Content", style=styles)
+   ```
+
+5. **No `Style()` components with custom CSS**
+   ```python
+   # FORBIDDEN
+   Style(".custom { background: blue; }")
+   ```
+
+## What to Use Instead
+
+### Tailwind CSS Classes via `cls` Parameter
+
+All styling should be done through Tailwind utility classes:
+
+```python
+# CORRECT
+Div("Content", cls="text-red-500 p-4")
+Div("Card", cls="bg-white rounded-lg shadow-md p-6")
+Button("Submit", cls="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded")
+```
+
+### MonsterUI Component Defaults
+
+Prefer pre-styled components that handle their own styling:
+
+```python
+# CORRECT - uses built-in styling
+Card(content, header="Title")
+Button("Click me", cls=ButtonT.primary)
+Container(content)
+```
+
+### Component Type Enums
+
+Use provided type enums for consistent styling:
+
+```python
+# CORRECT
+Button("Primary", cls=ButtonT.primary)
+Button("Ghost", cls=ButtonT.ghost)
+Card(content, cls=CardT.hover)
+```
+
+## Exception: Dynamic Values Only
+
+The ONLY acceptable use of `style=` is for truly dynamic values that cannot be expressed with Tailwind:
+
+```python
+# ACCEPTABLE - dynamic value from data
+Div("Progress", style=f"width: {percentage}%")
+Div("Custom position", style=f"left: {x_pos}px; top: {y_pos}px")
+```
+
+Even then, prefer Tailwind's arbitrary value syntax when possible:
+
+```python
+# PREFERRED over inline style
+Div("Box", cls=f"w-[{width}px]")
+```
+
+## Common Tailwind Alternatives
+
+| Instead of CSS | Use Tailwind |
+|----------------|--------------|
+| `color: red` | `text-red-500` |
+| `background: blue` | `bg-blue-500` |
+| `padding: 16px` | `p-4` |
+| `margin: 8px` | `m-2` |
+| `display: flex` | `flex` |
+| `justify-content: center` | `justify-center` |
+| `font-weight: bold` | `font-bold` |
+| `font-size: 24px` | `text-2xl` |
+| `border-radius: 8px` | `rounded-lg` |
+| `box-shadow: ...` | `shadow-md` |
+
+## Why This Rule Exists
+
+1. **Consistency** - Tailwind's design system ensures visual harmony
+2. **Maintainability** - No scattered CSS to hunt down and update
+3. **Performance** - Tailwind purges unused styles automatically
+4. **Colocation** - Styles live with components, not in separate files
+5. **Design tokens** - Colors, spacing, and sizing follow a coherent scale

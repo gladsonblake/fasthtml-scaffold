@@ -1,0 +1,242 @@
+---
+description: Rules for FastHTML + MonsterUI development with code readability focus
+alwaysApply: true
+---
+
+# FastHTML + MonsterUI Project Rules
+
+## Project Structure
+
+Organize code into these directories:
+- `routes/` - HTTP route handlers using APIRouter
+- `components/` - Reusable UI components as Python functions returning FT objects
+- `services/` - Business logic (database operations, data processing, external APIs)
+- `main.py` - Application entry point
+
+Keep routes thin: they should call services for logic and return components for UI.
+
+## FastHTML Conventions
+
+### Imports
+Always start files with:
+```python
+from fasthtml.common import *
+from monsterui.all import *
+```
+
+### App Initialization
+In `main.py`, initialize the app with MonsterUI theme headers:
+```python
+app, rt = fast_app(hdrs=Theme.blue.headers())
+```
+
+Available themes: slate, stone, gray, neutral, red, rose, orange, green, blue, yellow, violet, zinc
+
+Optional features can be enabled:
+```python
+hdrs = Theme.blue.headers(
+    katex=True,           # LaTeX math rendering
+    highlightjs=True,     # Code syntax highlighting
+    apex_charts=True,     # Chart components
+    mode='auto',          # 'light', 'dark', or 'auto'
+)
+```
+
+### Route Organization
+Use `APIRouter` for modular route organization in separate files:
+```python
+# routes/products.py
+from fasthtml.common import *
+from monsterui.all import *
+
+ar = APIRouter()
+
+@ar
+def products():
+    return Container(H1("Products"))
+```
+
+Then register in `main.py`:
+```python
+from routes.products import ar as products_router
+products_router.to_app(app)
+```
+
+### Route Handlers
+- Function name becomes the route path (e.g., `def products()` → `/products`)
+- Use `@rt` decorator for main app routes
+- Use `@ar` decorator for APIRouter routes
+- Return FT (FastTags) objects or tuples of FT objects
+- Use `Titled("Page Title", content)` for pages with titles
+
+### Server
+Always end `main.py` with:
+```python
+serve()
+```
+Never use `if __name__ == "__main__"` - `serve()` handles this internally.
+
+## MonsterUI Components
+
+### Page Structure
+- `Container` - Main content wrapper with max-width
+- `Titled("Title", content)` - Page with title (includes Container)
+- `Grid(*items, cols=3)` - Responsive grid layout
+
+### Layout Helpers
+Use these for flexbox layouts:
+- `DivHStacked` - Horizontal stack with gap
+- `DivVStacked` - Vertical stack with gap
+- `DivCentered` - Center content
+- `DivLAligned` - Left-aligned horizontal
+- `DivRAligned` - Right-aligned horizontal
+- `DivFullySpaced` - Space-between alignment
+
+### Core Components
+Pre-styled components (use these instead of raw HTML tags):
+- `Button("Text", cls=ButtonT.primary)` - Styled buttons
+- `Card(content, header=..., footer=...)` - Card containers
+- `Input`, `TextArea`, `Select` - Form inputs
+- `LabelInput`, `LabelSelect`, `LabelCheckboxX` - Labeled form fields
+
+### Component Type Enums
+Use type enums for consistent styling:
+- `ButtonT` - primary, secondary, ghost, destructive, outline, link
+- `CardT` - default, primary, secondary, hover
+- `TextPresets` - muted_sm, bold_sm, etc.
+
+### Icons
+```python
+UkIcon("icon-name", height=16)
+UkIconLink("icon-name", href="/path")
+```
+
+## Styling Rules
+
+### NEVER Use Vanilla CSS
+- No `<style>` tags
+- No `.css` files
+- No inline `style=` attributes (except for dynamic values)
+
+### Use Tailwind/DaisyUI via cls Parameter
+MonsterUI includes Tailwind CSS and DaisyUI. Apply styles through the `cls` parameter:
+```python
+Div("Content", cls="p-4 space-y-2")
+Card(content, cls="mt-4")
+```
+
+Common Tailwind utilities:
+- Spacing: `p-4`, `m-2`, `space-y-4`, `gap-4`
+- Flexbox: `flex`, `items-center`, `justify-between`
+- Grid: `col-span-2`, `row-span-2`
+- Text: `text-lg`, `font-bold`, `text-center`
+- Colors: `text-blue-600`, `bg-gray-100`
+
+### Minimal Styling Approach
+- Prefer MonsterUI's built-in component styling
+- Only add Tailwind classes when necessary for:
+  - Spacing adjustments (`space-y-4`, `mt-2`)
+  - Layout modifications (`col-span-2`)
+  - Responsive behavior (`cols_sm=1, cols_md=2`)
+- Avoid over-styling - let components use their defaults
+
+## Code Readability
+
+### Naming
+- Use descriptive function names: `create_user_card()` not `card1()`
+- Use descriptive variable names: `user_list` not `ul`
+- Component functions should be nouns: `UserCard`, `ProductGrid`
+- Route handlers can be verbs or nouns: `show_products`, `products`
+
+### Component Structure
+One component per function for reusability:
+```python
+def UserCard(name: str, role: str) -> FT:
+    """Display a user profile card."""
+    return Card(
+        DivLAligned(
+            DiceBearAvatar(name, h=12, w=12),
+            Div(H3(name), P(role))
+        )
+    )
+```
+
+### Formatting
+- Add vertical whitespace between logical sections
+- Use type hints for function parameters
+- Add docstrings for complex components
+- Group related components in the same file
+- Keep component files focused (one domain per file)
+
+### Example Component File
+```python
+# components/users.py
+from fasthtml.common import *
+from monsterui.all import *
+
+
+def UserCard(name: str, role: str, location: str = "Remote") -> FT:
+    """Display a user profile card with avatar and social links."""
+    return Card(
+        DivLAligned(
+            DiceBearAvatar(name, h=24, w=24),
+            Div(H3(name), P(role))
+        ),
+        footer=DivFullySpaced(
+            DivHStacked(UkIcon("map-pin", height=16), P(location)),
+            DivHStacked(
+                UkIconLink("mail", height=16),
+                UkIconLink("linkedin", height=16)
+            )
+        ),
+        cls=CardT.hover
+    )
+
+
+def UserGrid(users: list[dict]) -> FT:
+    """Display a responsive grid of user cards."""
+    return Grid(
+        *[UserCard(**user) for user in users],
+        cols_sm=1,
+        cols_md=2,
+        cols_lg=3
+    )
+```
+
+### Example Route File
+```python
+# routes/users.py
+from fasthtml.common import *
+from monsterui.all import *
+
+from components.users import UserGrid
+from services.users import get_all_users
+
+ar = APIRouter()
+
+
+@ar
+def users():
+    """Display all users page."""
+    user_data = get_all_users()
+    return Titled("Team Members", UserGrid(user_data))
+```
+
+### Example Service File
+```python
+# services/users.py
+
+def get_all_users() -> list[dict]:
+    """Fetch all users from the database."""
+    # Database logic here
+    return [
+        {"name": "Alice", "role": "Engineer", "location": "NYC"},
+        {"name": "Bob", "role": "Designer", "location": "LA"},
+    ]
+
+
+def get_user_by_id(user_id: int) -> dict | None:
+    """Fetch a single user by ID."""
+    # Database logic here
+    pass
+```
