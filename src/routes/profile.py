@@ -5,17 +5,16 @@ from monsterui.all import *
 
 from components.layout import PageLayout
 
-
 ar = APIRouter()
 
 
 # Fake user data
 FAKE_USER = {
-    "name": "Alex Johnson",
-    "email": "alex.johnson@example.com",
-    "bio": "Full-stack developer passionate about Python and web technologies. Building beautiful UIs with FastHTML and MonsterUI.",
-    "role": "Senior Developer",
-    "location": "San Francisco, CA",
+    "name": "Blake Gladson",
+    "email": "gladsonblake@gmail.com",
+    "bio": "Solutions for the oil and gas industry",
+    "role": "Solutions Analyst",
+    "location": "Midland, TX",
 }
 
 
@@ -23,7 +22,7 @@ def UserProfileCard() -> FT:
     """Display user profile information with fake data."""
     return Card(
         DivVStacked(
-            DiceBearAvatar(FAKE_USER["name"], h=24, w=24),
+            UkIcon("user", height=50),
             H2(FAKE_USER["name"], cls="mt-4"),
             P(FAKE_USER["role"], cls=TextPresets.muted_sm),
             cls="items-center mb-6",

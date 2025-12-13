@@ -1,5 +1,5 @@
 [project]
-name = "fasthtml-components"
+name = "fasthtml-scaffold"
 version = "0.1.0"
 description = "FastHTML + MonsterUI application template"
 readme = "README.md"
