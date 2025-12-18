@@ -119,12 +119,14 @@
   ],
   "education": [
     {
-      "school": "University Name",
-      "major": "Degree / Major",
-      "start_date": "Aug 2016",
-      "end_date": "May 2020",
+      "school": "Sterling College",
+      "major": "B.S. in Applied Mathematics and B.S. in Business Administration (Concentration in Economics and Finance)",
+      "start_date": "Aug 2017",
+      "end_date": "May 2021",
       "details": [
-        "Relevant coursework, honors, activities, etc."
+        "Cumulative GPA: 4.0",
+        "Student Government Association Senator and Vice President",
+        "Varsity Tennis, Varsity Cross Country, and Junior Varsity Basketball"
       ]
     }
   ]

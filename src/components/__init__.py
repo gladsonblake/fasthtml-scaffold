@@ -1,11 +1,10 @@
 """Reusable UI components."""
 
-from components.cards import WelcomeCard, InfoCard
-from components.sidebar import Sidebar, SidebarItem, SidebarToggle
+from components.cards import InfoCard
 from components.layout import PageLayout
+from components.sidebar import Sidebar, SidebarItem, SidebarToggle
 
 __all__ = [
-    "WelcomeCard",
     "InfoCard",
     "Sidebar",
     "SidebarItem",

@@ -1,0 +1,45 @@
+{
+  "introduction": {
+    "identity": {
+      "name": "Blake Gladson",
+      "headline": "Solutions Analyst",
+      "summary": "Passionate about building and leveraging systems to improve decision-making with data and analytics in the oil and gas industry."
+    },
+    "how_i_work": {
+      "philosophy_summary": "Building effective solutions requires humility to ask questions and listen, a commitment to continuous learning and growth, and a focus on serving others through consistent communication and collaboration with end users.",
+      "principles": [
+        {
+          "title": "Be Humble",
+          "description": "Be willing to admit when you don't know something. Ask questions. Listen."
+        },
+        {
+          "title": "Perpetually Grow",
+          "description": "Be comfortable being uncomfortable. Never stop learning."
+        },
+        {
+          "title": "Serve Others",
+          "description": "Add value to those around you. The world is not zero-sum."
+        },
+        {
+          "title": "DRY (Don't Repeat Yourself)",
+          "description": "Coding principles apply to other aspects of work. Automate repetitive work that introduces overhead so your focus stays on the work that adds the most value."
+        }
+      ]
+    },
+    "calls_to_action": [
+      {
+        "label": "Connect on LinkedIn",
+        "target": "https://www.linkedin.com/in/blake-gladson-19446614b/"
+      },
+      {
+        "label": "Send me an email",
+        "target": "mailto:gladsonblake@gmail.com"
+      }
+    ],
+    "contact_info": {
+      "email": "gladsonblake@gmail.com",
+      "phone": "(432) 853-7680",
+      "location": "Midland, TX"
+    }
+  }
+}

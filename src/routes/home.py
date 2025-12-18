@@ -3,10 +3,9 @@
 from fasthtml.common import *
 from monsterui.all import *
 
-from components.cards import WelcomeCard
+from components.home import HomePageContent
 from components.layout import PageLayout
-from services.example import get_welcome_message
-
+from services.home import get_home_section
 
 ar = APIRouter()
 
@@ -14,11 +13,11 @@ ar = APIRouter()
 @ar
 def home(sidebar_collapsed: str = None):
     """Display the home page."""
-    message = get_welcome_message()
+    home_data = get_home_section()
     collapsed = sidebar_collapsed == "true"
 
     return PageLayout(
-        "Home",
-        WelcomeCard(title="FastHTML + MonsterUI", message=message),
+        "Introduction",
+        HomePageContent(home_data=home_data),
         collapsed=collapsed,
     )
