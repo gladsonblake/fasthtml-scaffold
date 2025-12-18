@@ -1,0 +1,131 @@
+{
+  "experience": [
+    {
+      "company": "EOG Resources",
+      "position": " Associate Solutions Analyst",
+      "start_date": "Apr 2025",
+      "end_date": "Present",
+      "details": [
+        "Built Real-Time LOE and Capital Spending Analysis platform that integrates with existing company applications.",
+        "Maintained Compression Station optimization program, interacting with technologies such as Redis, MQTT, Modbus, etc.",
+        "Developed NGL Analysis application leveraging Procount data to ensure consistency between EOG and 3rd party purchaser data."
+      ]
+    },
+    {
+      "company": "EOG Resources",
+      "position": " Senior Production Engineering Technician",
+      "start_date": "Nov 2023",
+      "end_date": "Apr 2025",
+      "details": [
+        "Designed and implemented a novel autochoke algorithm using FastAPI to maximize oil production and minimize emissions. This algorithm has been adopted across the company.",
+        "Developed real-time cost tracking and forecasting systems for water disposal, flowback, and capital expenditures utilizing SQL, Python and Spotfire.",
+        "Collaborated closely with engineers to develop a wide range of data analyses and reports utilizing SQL and Spotfire."
+      ]
+    },
+    {
+      "company": "Discovery Operating, Inc.",
+      "position": " Special Projects Coordinator",
+      "start_date": "Jun 2021",
+      "end_date": "Nov 2023",
+      "details": [
+        "Used Python, SQL, and Excel to automate property performance reports.",
+        "Improved and automated quarterly reports given to executives.",
+        "Developed internal applications for mapping facilities and frac locations.",
+        "Utilized SQL and Python to locate anomalies in production."
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Python",
+      "category": "Languages"
+    },
+    {
+      "name": "SQL",
+      "category": "Languages"
+    },
+    {
+      "name": "VBA",
+      "category": "Languages"
+    },
+    {
+      "name": "API Development",
+      "category": "Technical Skills"
+    },
+    {
+      "name": "ETL Development",
+      "category": "Technical Skills"
+    },
+    {
+      "name": "Data Analysis/Visualization",
+      "category": "Technical Skills"
+    },
+    {
+      "name": "Microsoft Excel",
+      "category": "Software"
+    },
+    {
+      "name": "Time Management",
+      "category": "Soft Skills"
+    },
+    {
+      "name": "Communication",
+      "category": "Soft Skills"
+    },
+    {
+      "name": "Problem Solving",
+      "category": "Soft Skills"
+    },
+    {
+      "name": "IFS Procount",
+      "category": "Software"
+    },
+    {
+      "name": "Spotfire",
+      "category": "Software"
+    }
+  ],
+  "awards": [
+    {
+      "title": "Personal Best Award",
+      "issuer": "EOG Resources",
+      "date": "",
+      "description": ""
+    },
+    {
+      "title": "Talmon Bell Mathematics Award",
+      "issuer": "Sterling College",
+      "date": "",
+      "description": ""
+    },
+    {
+      "title": "2x NAIA Champion of Character Award",
+      "issuer": "Sterling College",
+      "date": "",
+      "description": ""
+    },
+    {
+      "title": "2x Daktronics-NAIA Scholar Athlete",
+      "issuer": "Sterling College",
+      "date": "",
+      "description": ""
+    },
+    {
+      "title": "KICF-Maud Wyatt Recognition Scholarship Recipient",
+      "issuer": "Sterling College",
+      "date": "",
+      "description": ""
+    }
+  ],
+  "education": [
+    {
+      "school": "University Name",
+      "major": "Degree / Major",
+      "start_date": "Aug 2016",
+      "end_date": "May 2020",
+      "details": [
+        "Relevant coursework, honors, activities, etc."
+      ]
+    }
+  ]
+}

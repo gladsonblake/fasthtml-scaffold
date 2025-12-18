@@ -6,7 +6,7 @@ from monsterui.all import *
 # Shared navigation items used by both desktop sidebar and mobile nav
 NAV_ITEMS = [
     ("home", "Home", "/home"),
-    ("info", "About", "/about"),
+    ("file-text", "Resume", "/about"),
     ("user", "Profile", "/profile"),
 ]
 
