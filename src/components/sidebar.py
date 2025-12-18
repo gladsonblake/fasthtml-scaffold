@@ -7,7 +7,7 @@ from monsterui.all import *
 NAV_ITEMS = [
     ("handshake", "Introduction", "/home"),
     ("file-text", "Resume", "/about"),
-    ("user", "Profile", "/profile"),
+    ("user", "Personal", "/profile"),
 ]
 
 
